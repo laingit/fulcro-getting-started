@@ -1,6 +1,7 @@
 (ns app.api.read
   (:require
-    [fulcro.server :refer [defquery-root defquery-entity defmutation]]))
+   [taoensso.timbre :as timbre]
+   [fulcro.server :refer [defquery-root defquery-entity defmutation]]))
 
 (def people-db (atom {1  {:db/id 1 :person/name "Bert" :person/age 55 :person/relation :friend}
                       2  {:db/id 2 :person/name "Sally" :person/age 22 :person/relation :friend}
@@ -22,6 +23,7 @@
 (defquery-root :my-friends
   "Queries for friends and returns them to the client"
   (value [{:keys [query]} params]
+    (timbre/info "my-friend" query)
     (get-people :friend query)))
 
 (defquery-root :my-enemies
@@ -32,5 +34,6 @@
 (defquery-entity :person/by-id
   "Server query for allowing the client to pull an individual person from the database"
   (value [env id params]
+    (timbre/info "person/by-id" id params)
     ; the update is just so we can see it change in the UI
     (update (get @people-db id) :person/name str " (refreshed)")))

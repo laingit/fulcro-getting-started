@@ -29,7 +29,7 @@
    :ident         [:person/by-id :db/id]
    :initial-state (fn [{:keys [id name age]}] {:db/id id :person/name name :person/age age})}
   (dom/li nil
-    (dom/h5 nil name (str "(age: " age ")")
+    (dom/h5 nil "id: " id " - " name (str "(age: " age ")")
       (dom/button #js {:onClick #(onDelete id)} "X")
       (dom/button #js {:onClick #(df/refresh! this)} "Refresh"))))
 
@@ -59,8 +59,8 @@
                    {:friends (prim/get-query PersonList)}
                    {:enemies (prim/get-query PersonList)}]
    :initial-state (fn [params] {:blog-posts (prim/get-initial-state Posts {}) ; <4>
-                                :friends    (prim/get-initial-state PersonList {:id :friends :label "Friends"})
-                                :enemies    (prim/get-initial-state PersonList {:id :enemies :label "Enemies"})})}
+                                 :friends    (prim/get-initial-state PersonList {:id :friends :label "Friends"})
+                                 :enemies    (prim/get-initial-state PersonList {:id :enemies :label "Enemies"})})}
   (dom/div #js {:key react-key}
     (dom/h4 nil (str "Current User: " (:person/name current-user)))
     (dom/button #js {:onClick (fn [] (df/load this [:person/by-id 3] Person))} "Refresh User with ID 3")

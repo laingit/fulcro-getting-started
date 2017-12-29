@@ -3,6 +3,7 @@
     [fulcro.client :as fc]
     [app.client :as core]
     [app.ui.root :as root]
+    [app.ui.root :as uilege]
     [cljs.pprint :refer [pprint]]
     [fulcro.client.logging :as log]))
 
@@ -11,11 +12,11 @@
 (log/set-level :all)
 
 (defn mount []
-  (reset! core/app (fc/mount @core/app root/Root "app")))
+  (reset! core/app-ger (fc/mount @core/app-ger uilege/Gerarchia "app")))
 
 (mount)
 
-(defn app-state [] @(:reconciler @core/app))
+(defn app-state [] @(:reconciler @core/app-ger))
 
 (defn log-app-state [& keywords]
   (pprint (let [app-state (app-state)]
