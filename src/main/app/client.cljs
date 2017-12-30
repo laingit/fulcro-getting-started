@@ -19,7 +19,8 @@
           :started-callback
           (fn [app]
             (println :LOAD-GERARCHIA)
-            #_(df/load app :current-user root/Person)
+            (df/load app :geoppr/gerarchia-name uileg/Gerarchia)
+            (df/load app :geoppr/gerarchia-items uileg/Gerarchia)
             #_(df/load app :my-friends root/Person {:target        [:person-list/by-id :friends :person-list/people]
                                                   :post-mutation `api/sort-friends})
             #_(df/load app :my-enemies root/Person {:target [:person-list/by-id :enemies :person-list/people]})))))
