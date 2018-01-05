@@ -20,7 +20,7 @@
           (fn [app]
             (println :LOAD-GERARCHIA)
             (df/load app :geoppr/gerarchia-name uileg/Gerarchia)
-            (df/load app :geoppr/gerarchia-items uileg/Gerarchia)
+            (df/load app :geoppr/gerarchia-items uileg/Gerarchia-Item)
             #_(df/load app :my-friends root/Person {:target        [:person-list/by-id :friends :person-list/people]
                                                   :post-mutation `api/sort-friends})
             #_(df/load app :my-enemies root/Person {:target [:person-list/by-id :enemies :person-list/people]})))))

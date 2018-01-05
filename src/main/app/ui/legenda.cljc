@@ -9,7 +9,8 @@
 
 
 (defsc Gerarchia-Item [_this {:keys [id desc_gerarchia level]}]
-  {:query [:id :desc_gerarchia :level]}
+  {:query [:id :desc_gerarchia :level]
+   :ident [:geoppr/gerarchia-byid :id]}
   (let [stringa (apply str (repeat (- level 1) "-|"))]
     (dom/li #js {:className "list-unstyled"}
             (condp = level
