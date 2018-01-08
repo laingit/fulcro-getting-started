@@ -8,7 +8,7 @@
 (defquery-root :geoppr/gerarchia-name
   "Queries for the current user and returns it to the client"
   (value [env params]
-    {:x " Gerarchia name from server"}))
+    " Gerarchia name from server"))
 
 (defquery-root :geoppr/gerarchia-items
   "Queries for the current user and returns it to the client"

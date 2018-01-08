@@ -11,19 +11,18 @@
 (defsc Gerarchia-Item [_this {:keys [id desc_gerarchia level]}]
   {:query [:id :desc_gerarchia :level]
    :ident [:geoppr/gerarchia-byid :id]}
-  (let [stringa (apply str (repeat (- level 1) "-|"))]
-    (dom/li #js {:className "list-unstyled"}
-            (condp = level
-              1 (dom/h6 #js {:style #js {:line-height 14
-                                         :font-size   (- 18 (* level 2))
-                                         :color       "#f00"
-                                         :margin      0}}
-                        stringa desc_gerarchia)
-              (dom/div #js {:style #js
-                                       {:line-height 11
-                                        :font-size   (- 18 (* level 2))
-                                        :margin      0}}
-                       stringa desc_gerarchia)))))
+  (let [stringa (apply str (repeat (- level 1) "|-- "))]
+    (dom/li #js {:className "list-unstyled" :style #js {:lineHeight 0.8}}
+            (dom/span #js {:style #js {:fontSize "14px"}} stringa
+                      (condp = level
+                        1 (dom/strong #js {:style #js {:fontSize     (- 18 (* level 2))
+                                                       :color        "#000"
+                                                       :marginBottom "10px"}}
+                                      desc_gerarchia)
+                        (dom/em #js {:style #js {:lineHeight 0.8
+                                                 :fontSize (- 16 (* level 2))
+                                                 :margin   0}}
+                                desc_gerarchia))))))
 
 (def ui-gerarchia-item (prim/factory Gerarchia-Item {:keyfn :id}))
 
@@ -42,19 +41,23 @@
 (def ui-command-bar (prim/factory Command-Bar))
 
 
-(defsc Gerarchia [_this {:keys [ui/react-key
+(defsc Gerarchia [_this {:keys [ui/fn-x
+                                ui/react-key
                                 ui/ui-geoppr
-                                name
+                                geoppr/gerarchia-name
                                 geoppr/gerarchia-items]}]
-  {:query         [:ui/react-key
+  {:query         [:ui/fn-x
+                   :ui/react-key
                    :ui/ui-geoppr
-                   :name
+                   :geoppr/gerarchia-name
                    {:geoppr/gerarchia-items (prim/get-query Gerarchia-Item)}]
    :initial-state (fn [p]
-                    {:ui/ui-geoppr           (prim/get-initial-state Command-Bar {})
-                     :name                   "Legenda Geologia ppr - Gerarchia"
+                    {:ui/fn-x (fn [x] (str x "2" ))
+                     :ui/ui-geoppr           (prim/get-initial-state Command-Bar {})
                      :geoppr/gerarchia-items []})}
-  (dom/div #js {:key react-key}
-           (ui-command-bar ui-geoppr)
-           (dom/ul nil
-                   (map ui-gerarchia-item gerarchia-items))))
+  (let [show-if (:ui/gerarchia-level ui-geoppr)]
+    (dom/div #js {:key react-key} (dom/div nil (fn-x "x"))
+             (ui-command-bar ui-geoppr)
+             (dom/ul nil
+                     (map ui-gerarchia-item
+                          (filter (fn [g] (> (:level g) show-if)) gerarchia-items))))))
