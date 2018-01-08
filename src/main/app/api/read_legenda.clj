@@ -15,3 +15,7 @@
   (value [env params]
     (utils-leg/get-gerarchia)))
 
+(defquery-root :geoppr/legenda-items
+               "Queries for the current user and returns it to the client"
+               (value [env params]
+                      (utils-leg/get-legenda)))
