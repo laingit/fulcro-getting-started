@@ -5,7 +5,11 @@
 
   :dependencies [[org.clojure/clojure "1.8.0"]
                  [org.clojure/clojurescript "1.9.946"]
-                 [fulcrologic/fulcro "2.1.0-beta2"]
+                 [fulcrologic/fulcro "2.1.0-beta3"]
+
+                 [fulcrologic/semantic-ui-react-wrappers "1.0.0-alpha1"]
+                 [cljsjs/semantic-ui-react "0.76.0-0"]
+
                  [fulcrologic/fulcro-spec "2.0.0-beta3" :scope "test" :exclusions [fulcrologic/fulcro]]]
 
   :uberjar-name "app.jar"
