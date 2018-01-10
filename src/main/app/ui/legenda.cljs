@@ -11,7 +11,8 @@
 
 
 (defsc Legenda-Item [_this {:keys [desc_gerar sigla gerar tipo geoppr id
-                                   unita_eta unita_desc unita_nome eta]}]
+                                   unita_eta unita_desc unita_nome eta
+                                   cartografato rgb]}]
   {:query [:desc_gerar
            :sigla
            :gerar
@@ -21,16 +22,23 @@
            :unita_eta
            :unita_desc
            :unita_nome
-           :eta]
+           :eta
+           :cartografato
+           :rgb]
    :ident [:geoppr/legenda-byid :id]}
   (let []
     (f/ui-list-item #js {:className "list-unstyled" :style #js {:lineHeight 1}}
                     (dom/div #js {:style #js {:marginBottom "3px"
-                                              :marginLeft "60px"
-                                              :maxWidth "900px"
-                                              :fontSize "14px"}}
-                              geoppr ": "
-                             (dom/em nil sigla) " - "
+                                              :marginLeft   "60px"
+                                              :maxWidth     "900px"
+                                              :fontSize     "14px"}}
+                             (if cartografato (f/ui-button #js {:width "60px" :height 20
+                                                          :style #js {:marginRight     "5px"
+                                                                      :borderWidth     "1px"
+                                                                      :border          "solid"
+                                                                      :backgroundColor rgb}} geoppr)
+                                              )
+                             (dom/em nil sigla) " | "
                              (dom/strong nil unita_nome) ": "
                              unita_desc))))
 
@@ -42,7 +50,7 @@
    :ident [:geoppr/gerarchia-byid :id]}
   (let [stringa (apply str (repeat (- level 1) "|-- "))]
 
-    (dom/li #js {:className "list-unstyled" :style #js {:lineHeight 0.8}}
+    (f/ui-list-item #js {:className "ui container"}
             (dom/span #js {:style #js {:fontSize "14px"}} cod_gerarchia ": " stringa
                       (condp = level
                         1 (dom/strong #js {:style #js {:fontSize     (- 18 (* level 2))
@@ -53,9 +61,9 @@
                                                  :fontSize   (- 16 (* level 2))
                                                  :margin     0}}
                                 desc_gerarchia)))
-            (f/ui-button #js {:content       "Me"
+            (f/ui-button #js {:content "Me"
                               :onClick #(prim/transact! this `[(apiui/associa-legenda-a-me {:id ~id :cod_gerarchia ~cod_gerarchia})])
-                              :icon          i/check-circle-icon})
+                              :icon    i/check-circle-icon})
             (f/ui-list nil
                        (map ui-legenda-item items-legenda)))))
 
@@ -67,24 +75,25 @@
    :initial-state (fn [p] {:ui/gerarchia-level 0})}
   (let []
     (dom/div nil gerarchia-level
-             (dom/button
-               #js {:onClick #(prim/transact! this `[(apiui/associa-legenda-a-gerarchia {}) [:geoppr/gerarchia-items]])}
-               "ASSOCIA ger legenda")
-             (dom/button
-               #js {:onClick #(df/load this :geoppr/gerarchia-items Gerarchia-Item)}
-               "load Gerarchia")
-             (dom/button
-               #js {:onClick #(df/load this :geoppr/legenda-items Legenda-Item)}
-               "load ")
-             (dom/button
-               #js {:onClick #(prim/transact! this `[(apiui/show-legenda {})])}
-               "SHOW legenda/GERARCHIA")
-             (dom/button
-               #js {:onClick #(prim/transact! this `[(apiui/gerarchia-level-up {})])}
-               "up")
-             (dom/button
-               #js {:onClick #(prim/transact! this `[(apiui/gerarchia-level-down {})])}
-               "down")
+             (dom/div #js{:className "ui small buttons"} "x"
+                      (f/ui-button
+                        #js {:onClick #(prim/transact! this `[(apiui/associa-legenda-a-gerarchia {}) [:geoppr/gerarchia-items]])}
+                        "ASSOCIA ger legenda")
+                      (f/ui-button
+                        #js {:onClick #(df/load this :geoppr/gerarchia-items Gerarchia-Item)}
+                        "load Gerarchia")
+                      (f/ui-button
+                        #js {:onClick #(df/load this :geoppr/legenda-items Legenda-Item)}
+                        "load ")
+                      (f/ui-button
+                        #js {:onClick #(prim/transact! this `[(apiui/show-legenda {})])}
+                        "SHOW legenda/GERARCHIA")
+                      (f/ui-button
+                        #js {:onClick #(prim/transact! this `[(apiui/gerarchia-level-up {})])}
+                        "up")
+                      (f/ui-button
+                        #js {:onClick #(prim/transact! this `[(apiui/gerarchia-level-down {})])}
+                        "down"))
              )))
 
 (def ui-command-bar (prim/factory Command-Bar))
