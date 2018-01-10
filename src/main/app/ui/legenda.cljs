@@ -98,6 +98,11 @@
 
 (def ui-command-bar (prim/factory Command-Bar))
 
+(defsc Prove [_ {:keys [ui/react-key reload]}]
+  {:query [:ui/react-key :reload]}
+  (dom/div #js{:key react-key} reload))
+
+(def ui-prova (prim/factory Prove))
 
 (defsc Gerarchia [this {:keys [ui/show-lege
                                ui/react-key
@@ -117,6 +122,7 @@
   (let [show-if (:ui/gerarchia-level ui-geoppr)]
     (dom/div #js {:key react-key} (dom/div nil (ui-geoppr :ui/gerarchia-level))
              (ui-command-bar ui-geoppr)
+             (ui-prova {:reload "prova"})
              (dom/ul nil
                      (if show-lege
                        (map ui-legenda-item legenda-items)
